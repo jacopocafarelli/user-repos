@@ -1,6 +1,6 @@
 package com.cafarelli.githubrepos.di;
 
-import com.cafarelli.githubrepos.MainActivity;
+import com.cafarelli.githubrepos.ui.activity.MainActivity;
 
 import javax.inject.Singleton;
 

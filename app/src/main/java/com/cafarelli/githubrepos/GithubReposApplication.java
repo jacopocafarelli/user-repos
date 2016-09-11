@@ -8,7 +8,7 @@ import com.cafarelli.githubrepos.di.NetworkComponent;
 import com.cafarelli.githubrepos.di.NetworkModule;
 
 
-public class MyApplication extends Application {
+public class GithubReposApplication extends Application {
 
     private NetworkComponent networkComponent;
 

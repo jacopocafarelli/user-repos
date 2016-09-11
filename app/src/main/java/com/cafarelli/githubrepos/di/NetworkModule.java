@@ -1,5 +1,9 @@
 package com.cafarelli.githubrepos.di;
 
+import android.content.Context;
+
+import com.cafarelli.githubrepos.network.GithubService;
+import com.cafarelli.githubrepos.usecase.ConnectivityUseCase;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -36,11 +40,16 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
+    GithubService provideRetrofitService(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
-                .build();
+                .build().create(GithubService.class);
+    }
+
+    @Provides
+    ConnectivityUseCase provideConnectivityUseCase(Context context) {
+        return new ConnectivityUseCase(context);
     }
 }
