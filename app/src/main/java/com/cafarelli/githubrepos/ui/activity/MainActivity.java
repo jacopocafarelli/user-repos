@@ -17,11 +17,14 @@ import com.cafarelli.githubrepos.model.Repo;
 import com.cafarelli.githubrepos.presenter.GithubReposPresenter;
 import com.cafarelli.githubrepos.ui.adapter.ReposAdapter;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GithubReposPresenter.View {
+
+    private static final String ITEMS_SAVED_INSTANCE = "ITEMS_SAVED_INSTANCE";
 
     @Inject
     GithubReposPresenter presenter;
@@ -48,8 +51,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         reposRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         reposAdapter = new ReposAdapter();
         reposRecyclerView.setAdapter(reposAdapter);
+        if (savedInstanceState != null && savedInstanceState.containsKey(ITEMS_SAVED_INSTANCE)) {
+            //noinspection unchecked
+            reposAdapter.setRepoList((List<Repo>) savedInstanceState.getSerializable(ITEMS_SAVED_INSTANCE));
+        }
 
         presenter.setView(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(ITEMS_SAVED_INSTANCE, (Serializable) reposAdapter.getRepoList());
     }
 
     @Override
@@ -86,12 +99,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void showEmpty() {
         reposFoundTextView.setVisibility(View.GONE);
+        reposAdapter.clear();
         Snackbar.make(searchButton, getString(R.string.error_empty_repos), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showError() {
         reposFoundTextView.setVisibility(View.GONE);
+        reposAdapter.clear();
         Snackbar.make(searchButton, getString(R.string.error_downloading_repos), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showNoSearchWithEmpty() {
+        reposFoundTextView.setVisibility(View.GONE);
+        reposAdapter.clear();
+        searchInputEditText.setError(getString(R.string.error_empty_query));
     }
 }

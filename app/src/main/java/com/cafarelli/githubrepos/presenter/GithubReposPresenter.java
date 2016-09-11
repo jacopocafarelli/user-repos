@@ -14,15 +14,14 @@ import retrofit2.Response;
 
 public class GithubReposPresenter {
 
-    @Inject
-    ConnectivityUseCase connectivityUseCase;
-    @Inject
-    GetUserReposUseCase getUserReposUseCase;
-
-    GithubReposPresenter.View view;
+    private ConnectivityUseCase connectivityUseCase;
+    private GetUserReposUseCase getUserReposUseCase;
+    private GithubReposPresenter.View view;
 
     @Inject
-    public GithubReposPresenter() {
+    public GithubReposPresenter(ConnectivityUseCase connectivityUseCase, GetUserReposUseCase getUserReposUseCase) {
+        this.connectivityUseCase = connectivityUseCase;
+        this.getUserReposUseCase = getUserReposUseCase;
     }
 
     public void setView(GithubReposPresenter.View view) {
@@ -32,6 +31,11 @@ public class GithubReposPresenter {
     public void onSearchRepos(String username) {
         if (!connectivityUseCase.isNetworkAvailable()) {
             view.showNoInternetConnection();
+            return;
+        }
+
+        if (username == null || username.isEmpty()) {
+            view.showNoSearchWithEmpty();
             return;
         }
 
@@ -58,10 +62,17 @@ public class GithubReposPresenter {
 
     public interface View {
         void showNoInternetConnection();
+
         void showLoading();
+
         void stopLoading();
+
         void showRepos(List<Repo> repos);
+
         void showEmpty();
+
         void showError();
+
+        void showNoSearchWithEmpty();
     }
 }
