@@ -3,6 +3,7 @@
     <string name="error_no_connection">No internet connection available</string>
     <string name="error_downloading_repos">There was an error while downloading repos</string>
     <string name="error_empty_repos">There are no repos to show for this user</string>
+    <string name="number_repos_found">%d repos found</string>
     <string name="search">Search</string>
     <string name="username">Username</string>
 </resources>

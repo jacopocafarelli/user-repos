@@ -14,6 +14,11 @@ public class GetUserReposUseCase {
     @Inject
     GithubService githubService;
 
+    @Inject
+    public GetUserReposUseCase() {
+
+    }
+
     public Call<List<Repo>> getUserRepos(String username) {
         return githubService.userRepos(username);
     }
